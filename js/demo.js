@@ -315,11 +315,9 @@ function untangle(){
         .on("end", dragended));
    
     analysis(links);  
-    $("#vis-button").show();
+//    $("#vis-button").show();
     var graphAnalysis = JSON.stringify(links);
 }
-
-
 
 function linkDistance(d){
     return 50 * d.time;
@@ -334,9 +332,9 @@ function analysis(links){
     var counts = [];
     var n = 1
     
-    simulation.force("link", d3.forceLink(links).distance(150))
-        .force("charge", d3.forceManyBody().strength(-300))
-        .force("collide", d3.forceCollide().radius(80));
+    simulation.force("link", d3.forceLink(links).distance(100))
+        .force("charge", d3.forceManyBody().strength(-200))
+        .force("collide", d3.forceCollide().radius(30));
     
     links.forEach(function(d, i){
         var item = d.target.id;
