@@ -407,7 +407,6 @@ function linkArc(d) {
   var xPad,
       yPad;
   
-
   if(d.target.x < d.source.x) {
             xPad = d.source.x - r2;
         } else {

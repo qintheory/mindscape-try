@@ -49,7 +49,7 @@ svg{
   -webkit-align-items: center;
   align-items: center;
   border-radius: 20px;
-  background-color: black;
+  background-color: aliceblue;
   box-shadow: 1px 1px 15px 2px rgba(0, 0, 0, 0.09);
 }
 
@@ -261,7 +261,7 @@ svg{
   align-items: center;
   border: 1px none #000;
   border-radius: 0px;
-  background-color: black;
+  background-color: aliceblue;
 }
 
 .textarea {
