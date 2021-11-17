@@ -34,7 +34,7 @@ var text = g.attr("class", "texts")
         .selectAll("text");
 
 // DEFINE LINKS    
-var link = g.attr("stroke", "#333")
+var link = g.attr("stroke", "aliceblue")
     .selectAll("path");
     
 var links = [];
@@ -50,7 +50,7 @@ svg.append("defs").selectAll("marker")
     .attr("markerWidth", 6)
     .attr("markerHeight", 6)
     .attr("orient", "auto")
-    .style("fill", "#333")
+    .style("fill", "aliceblue")
   .append("path")
     .attr("d", "M0,-5L10,0L0,5");    
         
@@ -140,10 +140,11 @@ function updateNodes(d, i) {
       .attr("class", "node")
       .attr("r", 10)
       .style("fill", "#f6f6f6")
-      .style("stroke", "#669999")
+      .style("opacity", "0.3")
+      .style("stroke", "aliceblue")
       .style("z-index", 9)
       .attr("id", function(d){ return d.id; })
-      .style("stroke-opacity", 0.6)
+      .style("stroke-opacity", 1)
       .merge(node)
       .call(d3.drag()
         .on("start", dragstarted)
@@ -161,6 +162,7 @@ function updateNodes(d, i) {
             .attr("x", 8)
             .attr("y", ".31em")
             .style("z-index", 8)
+            .style("fill", "aclieblue")
             .style("opacity", 0.5)
             .merge(text)
             .attr("id", function(d){ return d.id; })
@@ -240,19 +242,15 @@ function makeLinks() {
             else {
                 previousClick = nowClick;
             }
-        })
-        
-
+        })    
     }
 }
 
 function selectedNode(d) {
     // selected node - colour highlighted
     d3.select(d).transition()
-            .style("fill", "#669999")
-                .attr("r", 10)
-            .transition()
-              .attr("r", 10)
+            .style("fill", "aliceblue")
+            .style("opacity", "0.7")
     ;  
     node = node.style("fill", "#f6f6f6").merge(node);
 }
@@ -261,7 +259,7 @@ function deselectNode(d) {
     // unhighlight the previous node
     d3.select(d)
         .attr("r", 10)
-        .style("fill", "#669999")
+        .style("fill", "#f6f6f6")
         .merge(node)
     ; 
 }
