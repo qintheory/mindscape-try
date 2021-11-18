@@ -3,15 +3,11 @@ var time, date1, date2;
 // numerate the nodes    
 var id = 0;   
 var size = 1;
-var svgNodeCount = 0;    
-var nodeNum;
-var vis = false;
     
 var previousClick = null;
 var nodeClicked = false;
 var loopFormed = false;
 var nodeRepeated = false;
-var connector = [];
 var train = [];
 var streams = [];
 var nowClick;
@@ -26,7 +22,7 @@ var svg = d3.select("forum").insert("svg")
             ;
 
 // DEFINE NODES AND TEXTS    
-var nodes = [ ],
+var nodes = [],
     node = g.attr("class", "nodes")
         .selectAll(".node");  
 
@@ -71,8 +67,6 @@ $("#finish").click(function(){
 
 function drawNode(name){
    var item = {name, id, size};
-   console.log(item);      
-   d3.select
    nodes.push(item);
    updateNodes();  
    linkingBegins();
@@ -202,6 +196,8 @@ function makeLinks() {
         // register time
         date1 = new Date().getTime();
     } 
+    
+    
     else if (previousClick == nowClick){
         console.log("cannot connect to oneself"); 
         $("#nodeCounter").text("cannot connect to oneself")
@@ -221,7 +217,7 @@ function makeLinks() {
         deselectNode(previousClick);
         selectedNode(nowClick);
         train.push(nowClick.id);
-        console.log(train);
+
         //check if loops
         links.forEach(function(d, i){
             if (d.source.id == nowClick.id){
@@ -461,7 +457,18 @@ $(document).ready(function(){
 $("#redo-button").click(function(){
 //    d3.selectAll("circle").remove();
 //    d3.selectAll("text").remove();
-    d3.selectAll("path").remove();
+    $(".home-text-box").show();
+    $("#finish").show();
+    $("#redo-button").hide();
+    g.selectAll('*').remove();
+    links = [];
+    train = [];
+    streams = [];
+    nowClick == null ;
+    previousClick = null;
+    nodeClicked = false;
+    loopFormed = false;
+    nodeRepeated = false;
 //    $.each(input, function(index, item) {
 //        drawNode(item);    
 //    });

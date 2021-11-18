@@ -48,7 +48,7 @@ svg{
   flex-direction: column;
   -webkit-align-items: center;
   align-items: center;
-  height: 600px;
+  height: 500px;
 }
 
 .home-text-box {
