@@ -30,6 +30,8 @@ svg{
   justify-content: space-around;
   -webkit-flex-wrap: nowrap;
   -ms-flex-wrap: nowrap;
+  -webkit-align-items: center;
+  align-items: center;    
   flex-wrap: nowrap;
 }
 

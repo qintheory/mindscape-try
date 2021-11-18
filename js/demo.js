@@ -19,7 +19,7 @@ var nowClick;
 var width = 600,
     height = 500;
 
-var svg = d3.select(".content-block").insert("svg")
+var svg = d3.select("forum").insert("svg")
             .attr("width", width)
             .attr("height", height),
     g = svg.append("g")
@@ -37,22 +37,7 @@ var text = g.attr("class", "texts")
 var link = g.attr("stroke", "aliceblue")
     .selectAll("path");
     
-var links = [];
-
-// DEFINING Arrows on the links/arcs    
-svg.append("defs").selectAll("marker")
-    .data(["end"])
-  .enter().append("marker")
-    .attr("id", function(d) { return d; })
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 15)
-    .attr("refY", -1.5)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
-    .attr("orient", "auto")
-    .style("fill", "aliceblue")
-  .append("path")
-    .attr("d", "M0,-5L10,0L0,5");    
+var links = []; 
         
 // DEFINE FORCES    
 var simulation = d3.forceSimulation()
@@ -66,13 +51,14 @@ var simulation = d3.forceSimulation()
 var zoom = d3.zoom()
         .on("zoom", zoom_actions);
 
+var input = [];
+
 // enabling mouse up at all times   
 svg.on("mouseup", mouseUp);
-//restart();
 
 $("#finish").click(function(){
+    input = $("#field").val();
     $(".home-text-box").hide();
-    var input = $("#field").val();
     input = input.replace(/(?:(?:\r\n|\r|\n)\s*){2}/gm, "\n");
     input = input.split('\n');
     
@@ -81,7 +67,8 @@ $("#finish").click(function(){
     });
 })
 
-// drawing 
+// DRAWING BEGHINS
+
 function drawNode(name){
    var item = {name, id, size};
    console.log(item);      
@@ -91,36 +78,36 @@ function drawNode(name){
    linkingBegins();
 }
 
-function butterfly(d) {
-  var dx = parseFloat(d.target.x) - parseFloat(d.source.x);
-  var dy = parseFloat(d.target.y) - parseFloat(d.source.y);
-  var dr = Math.sqrt(dx * dx + dy * dy);
-  var r =  d.source.name.size*10; 
-  var xPad,
-      yPad; 
-
-    if(d.target.x < d.source.x) {
-        xPad = d.source.x - r;
-    } else {
-        xPad = d.source.x + r;
-    }
-
-    if(d.target.y < d.source.y) {
-        yPad = d.source.y + r;
-    } else {
-        yPad = d.source.y - r;
-    }
-
-    l = Math.sqrt(dx * dx + r * r);   
-    let tearWidth = 1.05;
-    let path = 
-    `M ${d.target.x} ${d.target.y}, 
-    Q ${xPad*tearWidth} ${yPad*tearWidth}, ${d.source.x} ${d.source.y}, 
-    T ${d.target.x} ${d.target.y},
-    Z`;
-
-    return path;
-}
+//function butterfly(d) {
+//  var dx = parseFloat(d.target.x) - parseFloat(d.source.x);
+//  var dy = parseFloat(d.target.y) - parseFloat(d.source.y);
+//  var dr = Math.sqrt(dx * dx + dy * dy);
+//  var r =  d.source.name.size*10; 
+//  var xPad,
+//      yPad; 
+//
+//    if(d.target.x < d.source.x) {
+//        xPad = d.source.x - r;
+//    } else {
+//        xPad = d.source.x + r;
+//    }
+//
+//    if(d.target.y < d.source.y) {
+//        yPad = d.source.y + r;
+//    } else {
+//        yPad = d.source.y - r;
+//    }
+//
+//    l = Math.sqrt(dx * dx + r * r);   
+//    let tearWidth = 1.05;
+//    let path = 
+//    `M ${d.target.x} ${d.target.y}, 
+//    Q ${xPad*tearWidth} ${yPad*tearWidth}, ${d.source.x} ${d.source.y}, 
+//    T ${d.target.x} ${d.target.y},
+//    Z`;
+//
+//    return path;
+//}
 
 function updateNodes(d, i) {
     // update id # of the node
@@ -171,7 +158,6 @@ function updateNodes(d, i) {
     
     simulation.nodes(nodes);
     simulation.restart();
-    $("#nodeCounter").text("Node Count: " +  nodes.length);
 }
 
 // ENABLING LINK MAKING FROM NODES     
@@ -190,9 +176,11 @@ function linkingBegins() {
 
 
 function makeLinks() {
+    $("#redo-button").show();
+    
     nowClick = this;
     nodeClicked = true;
-
+    
     // check if the clicked node is repeated
     links.forEach(function(d){
         if (d.source.id == nowClick.id & loopFormed == true){
@@ -214,6 +202,10 @@ function makeLinks() {
         // register time
         date1 = new Date().getTime();
     } 
+    else if (previousClick == nowClick){
+        console.log("cannot connect to oneself"); 
+        $("#nodeCounter").text("cannot connect to oneself")
+    }
     
     // CASE 3 & 4, forming links
     else {
@@ -250,8 +242,7 @@ function selectedNode(d) {
     // selected node - colour highlighted
     d3.select(d).transition()
             .style("fill", "aliceblue")
-            .style("opacity", "0.7")
-    ;  
+            .style("opacity", "0.7");  
     node = node.style("fill", "#f6f6f6").merge(node);
 }
 
@@ -260,8 +251,7 @@ function deselectNode(d) {
     d3.select(d)
         .attr("r", 10)
         .style("fill", "#f6f6f6")
-        .merge(node)
-    ; 
+        .merge(node); 
 }
  
 // MOUSE DOWN to create a link
@@ -289,13 +279,27 @@ function mouseUp() {
 } 
 
 function updateLink() {
-    link = link.data(links, function(d) { return d.source.id + "-" + d.target.id; });
+  link = link.data(links, function(d) { return d.source.id + "-" + d.target.id; });
   link.exit().remove();
   link = link.enter().append("path")
       .attr("class", "link")
       .attr("marker-end", "url(#end)")
       .merge(link);
 
+  // DEFINING Arrows on the links/arcs    
+    svg.append("defs").selectAll("marker")
+        .data(["end"])
+      .enter().append("marker")
+        .attr("id", function(d) { return d; })
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 15)
+        .attr("refY", -1.5)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+        .style("fill", "aliceblue")
+      .append("path")
+        .attr("d", "M0,-5L10,0L0,5");     
   // Update and restart the simulation.
   simulation.nodes(nodes);
   simulation.alpha(1).restart(); 
@@ -313,7 +317,6 @@ function untangle(){
         .on("start", dragstarted)
         .on("drag", dragged)
         .on("end", dragended));
-   
     analysis(links);  
 //    $("#vis-button").show();
     var graphAnalysis = JSON.stringify(links);
@@ -369,7 +372,6 @@ function analysis(links){
     svg.on("mouseup", null);
     zoom(svg);
 }
-
 
 // FORCE TRANSFORMATION    
 function tick() {
@@ -451,10 +453,16 @@ function zoom_actions(){
 /// UI
 $(document).ready(function(){
     console.log("document ready");
-    $("#vis-button").hide();
-    $("#light").hide();
+//    $("#vis-button").hide();
+    $("#undo-button").hide();
+    $("#redo-button").hide();
 });
 
-$("#vis-button").click(function(){
-    console.log(vis);
+$("#redo-button").click(function(){
+//    d3.selectAll("circle").remove();
+//    d3.selectAll("text").remove();
+    d3.selectAll("path").remove();
+//    $.each(input, function(index, item) {
+//        drawNode(item);    
+//    });
 })
