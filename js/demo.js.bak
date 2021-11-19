@@ -501,7 +501,7 @@ $("#redo-button").click(function(){
 //    d3.selectAll("circle").remove();
 //    d3.selectAll("text").remove();
 
-    simulation.restart();
+simulation.restart();
 
 	// Bjorn-Fix
 	width = 600;
@@ -512,12 +512,11 @@ $("#redo-button").click(function(){
         .selectAll("text").remove();
 	g.attr("stroke", "aliceblue")
 		.selectAll("path").remove();
-	
-    // Charlotte-Fix
-//	svg = d3.select("forum").insert("svg")
-//				.attr("width", width)
-//				.attr("height", height),
-//		g = svg.append("g").on("mouseup", mouseUp);	
+		
+	svg = d3.select("forum").insert("svg")
+				.attr("width", width)
+				.attr("height", height),
+		g = svg.append("g").on("mouseup", mouseUp);	
 
 	// Bjorn-FIX: this was missing    
 	id = 0;   
@@ -560,8 +559,8 @@ $("#redo-button").click(function(){
 		.force("center", d3.forceCenter(width / 2, height / 2))
 		.on("tick", tick); */
 
-	//simulation.nodes(nodes);
-    //simulation.restart();
+	simulation.nodes(nodes);
+    simulation.restart();
 
 
 //    $.each(input, function(index, item) {

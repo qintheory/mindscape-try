@@ -17,7 +17,6 @@ svg{
     opacity: 0.9;
 }
 
-
 .section {
   position: -webkit-sticky;
   position: sticky;
@@ -73,6 +72,8 @@ svg{
 .button {
   padding-right: 20px;
   padding-left: 20px;
+  margin-right: 40px;  
+  margin-left: 40px;  
   border-radius: 12px;
   background-color: transparent;
   font-size: 12px;
@@ -139,4 +140,10 @@ svg{
 .form {
   min-width: 100%;
   text-align: center;
+}
+
+.buttonholder {
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
 }
